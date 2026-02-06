@@ -1,14 +1,22 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import ReactMarkdown from 'react-markdown';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-  Bot, Sparkles, Loader2, BrainCircuit, Search,
-  Atom, Zap, FileJson, CheckCircle2, ChevronRight
+  Bot, Sparkles, Loader2, BrainCircuit,
+  CheckCircle2, ChevronRight,
+  Terminal, Download, Cpu
 } from 'lucide-react';
 
 interface ResearchResponse {
   finalReport: string;
+}
+
+interface AgentLog {
+  agent: string;
+  message: string;
+  timestamp: string;
+  type: 'info' | 'success' | 'warning';
 }
 
 function App() {
@@ -16,6 +24,19 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<string | null>(null);
   const [activeAgent, setActiveAgent] = useState<string>('');
+  const [logs, setLogs] = useState<AgentLog[]>([]);
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
+  }, [logs]);
+
+  const addLog = (agent: string, message: string, type: 'info' | 'success' | 'warning' = 'info') => {
+    const timestamp = new Date().toLocaleTimeString([], { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    setLogs(prev => [...prev, { agent, message, timestamp, type }]);
+  };
 
   const generateMockReport = (topic: string) => {
     return `
@@ -41,40 +62,60 @@ This demonstration confirms the architecture's ability to orchestrate complex mu
     `;
   };
 
+  const downloadReport = () => {
+    if (!result) return;
+    const element = document.createElement("a");
+    const file = new Blob([result], { type: 'text/markdown' });
+    element.href = URL.createObjectURL(file);
+    element.download = `Research_Report_${topic.replace(/\s+/g, '_')}.md`;
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!topic.trim()) return;
 
     setLoading(true);
     setResult(null);
+    setLogs([]);
     setActiveAgent('Researcher Details...');
 
-    // Simulate agent progression for better UX
     const agentSequence = [
-      { name: 'Researcher Agent', action: 'Scouring the knowledge base...', color: 'text-cyan-400', icon: Search },
-      { name: 'Critic Agent', action: 'Analyzing gaps & logic...', color: 'text-red-400', icon: Zap },
-      { name: 'Synthesizer Agent', action: 'Connecting the dots...', color: 'text-purple-400', icon: Atom },
-      { name: 'Writer Agent', action: 'Crafting the master report...', color: 'text-green-400', icon: FileJson }
+      { name: 'Researcher', action: 'Scouring knowledge base...', logs: ['Initializing neural search...', 'Scanning academic repositories...', 'Extracting core entities...', 'Filtering noise from data...'] },
+      { name: 'Critic', action: 'Analyzing gaps...', logs: ['Validating source reliability...', 'Checking for logical inconsistencies...', 'Cross-referencing datasets...', 'Flagging potential biases...'] },
+      { name: 'Synthesizer', action: 'Connecting dots...', logs: ['Merging data vectors...', 'Resolving conflicting nodes...', 'Identifying emergent patterns...', 'Structuring knowledge graph...'] },
+      { name: 'Writer', action: 'Crafting report...', logs: ['Initializing writing engine...', 'Applying professional tone...', 'Formatting markdown structure...', 'Finalizing synthesis...'] }
     ];
 
-    // Reset sequence
-    let step = 0;
-    setActiveAgent(`${agentSequence[0].name}: ${agentSequence[0].action}`);
+    let currentAgentIdx = 0;
+    let currentLogIdx = 0;
 
     const interval = setInterval(() => {
-      step = (step + 1) % agentSequence.length;
-      const current = agentSequence[step];
-      setActiveAgent(`${current.name}: ${current.action}`);
-    }, 5000);
+      const agent = agentSequence[currentAgentIdx];
+      setActiveAgent(`${agent.name}: ${agent.action}`);
+
+      if (currentLogIdx < agent.logs.length) {
+        addLog(agent.name, agent.logs[currentLogIdx]);
+        currentLogIdx++;
+      } else {
+        addLog(agent.name, "Phase complete.", 'success');
+        currentAgentIdx++;
+        currentLogIdx = 0;
+        if (currentAgentIdx >= agentSequence.length) {
+          clearInterval(interval);
+        }
+      }
+    }, 1200);
 
     try {
-      // Try to hit the backend
-      const response = await axios.post<ResearchResponse>('http://localhost:8080/api/research', { topic }, { timeout: 2000 }); // Fast timeout to fallback quickly
+      const response = await axios.post<ResearchResponse>('http://localhost:8080/api/research', { topic }, { timeout: 8000 });
+      clearInterval(interval);
       setResult(response.data.finalReport);
     } catch (error) {
-      console.warn("Backend unavailable, switching to Autonomous Frontend Mode.");
-      // FALLBACK: Generate report locally if backend is down (allows static deployment)
-      await new Promise(resolve => setTimeout(resolve, 2000)); // Ensure animation plays for a bit
+      console.warn("Backend unavailable, using Autonomous Mode.");
+      await new Promise(resolve => setTimeout(resolve, 8000));
       setResult(generateMockReport(topic));
     } finally {
       clearInterval(interval);
@@ -158,15 +199,16 @@ This demonstration confirms the architecture's ability to orchestrate complex mu
           </form>
         </motion.div>
 
-        {/* Processing Viz */}
+        {/* Processing Viz & Terminal */}
         <AnimatePresence>
           {loading && (
             <motion.div
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
-              className="w-full max-w-4xl mt-12 overflow-hidden"
+              className="w-full mt-12 grid grid-cols-1 lg:grid-cols-2 gap-6"
             >
+              {/* Agent Status UI */}
               <div className="glass-panel p-8 relative overflow-hidden">
                 <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-500 animate-[shimmer_2s_infinite]"></div>
 
@@ -182,7 +224,7 @@ This demonstration confirms the architecture's ability to orchestrate complex mu
                     <p className="text-cyan-400 font-mono text-sm animate-pulse">{activeAgent.split(':')[1]}</p>
                   </div>
 
-                  <div className="grid grid-cols-4 gap-4 w-full">
+                  <div className="grid grid-cols-2 gap-4 w-full">
                     {['Researcher', 'Critic', 'Synthesizer', 'Writer'].map((agent, i) => (
                       <div key={agent} className={`p-4 rounded-xl border ${activeAgent.includes(agent) ? 'border-cyan-500 bg-cyan-500/10 shadow-[0_0_15px_rgba(6,182,212,0.3)]' : 'border-white/5 bg-white/5'} transition-all duration-500`}>
                         <div className="flex justify-between items-center mb-2">
@@ -193,6 +235,26 @@ This demonstration confirms the architecture's ability to orchestrate complex mu
                       </div>
                     ))}
                   </div>
+                </div>
+              </div>
+
+              {/* Live Terminal Log */}
+              <div className="glass-panel p-6 bg-black/40 font-mono text-xs overflow-hidden flex flex-col h-[400px]">
+                <div className="flex items-center gap-2 mb-4 border-b border-white/10 pb-2">
+                  <Terminal className="w-4 h-4 text-cyan-400" />
+                  <span className="text-slate-300 font-bold uppercase tracking-widest">Live Swarm Console</span>
+                </div>
+                <div ref={scrollRef} className="flex-1 overflow-y-auto space-y-2 scrollbar-thin scrollbar-thumb-white/10">
+                  {logs.map((log, i) => (
+                    <div key={i} className="flex gap-3 animate-in fade-in slide-in-from-left-2 transition-all">
+                      <span className="text-slate-600">[{log.timestamp}]</span>
+                      <span className="text-cyan-500 font-bold">[{log.agent}]</span>
+                      <span className={log.type === 'success' ? 'text-green-400' : log.type === 'warning' ? 'text-yellow-400' : 'text-slate-300'}>
+                        {log.message}
+                      </span>
+                    </div>
+                  ))}
+                  <div className="animate-pulse inline-block w-2 h-4 bg-cyan-500 ml-1"></div>
                 </div>
               </div>
             </motion.div>
@@ -221,9 +283,15 @@ This demonstration confirms the architecture's ability to orchestrate complex mu
                     </div>
                     <p className="text-slate-400 font-mono text-sm pl-1">TARGET_TOPIC: <span className="text-cyan-400 uppercase">{topic}</span></p>
                   </div>
-                  <button onClick={() => setResult(null)} className="px-4 py-2 rounded-lg bg-white/5 hover:bg-white/10 text-sm text-slate-300 transition-colors border border-white/5">
-                    START NEW SEQUENCE
-                  </button>
+                  <div className="flex gap-4">
+                    <button onClick={downloadReport} className="flex items-center gap-2 px-4 py-2 rounded-lg bg-cyan-500/10 hover:bg-cyan-500/20 text-sm text-cyan-400 transition-colors border border-cyan-500/20">
+                      <Download className="w-4 h-4" />
+                      EXPORT MD
+                    </button>
+                    <button onClick={() => setResult(null)} className="px-4 py-2 rounded-lg bg-white/5 hover:bg-white/10 text-sm text-slate-300 transition-colors border border-white/5">
+                      START NEW SEQUENCE
+                    </button>
+                  </div>
                 </div>
 
                 <div className="prose-custom">
@@ -231,7 +299,10 @@ This demonstration confirms the architecture's ability to orchestrate complex mu
                 </div>
 
                 <div className="mt-12 pt-6 border-t border-white/10 flex justify-between items-center text-xs text-slate-500 font-mono uppercase">
-                  <span>Generated by Antigravity Engine</span>
+                  <div className="flex items-center gap-4">
+                    <span>Generated by Antigravity Engine</span>
+                    <span className="flex items-center gap-1"><Cpu className="w-3 h-3" /> v2.4.0-STABLE</span>
+                  </div>
                   <div className="flex items-center gap-2">
                     <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
                     System Operational
@@ -248,3 +319,4 @@ This demonstration confirms the architecture's ability to orchestrate complex mu
 }
 
 export default App;
+

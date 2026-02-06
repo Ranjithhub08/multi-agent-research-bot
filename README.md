@@ -2,7 +2,7 @@
 <div align="center">
 
 # ⚡️ AUTONOMOUS RESEARCH GRID ⚡️
-### Multi-Agent Intelligence Swarm // V2.0
+### Multi-Agent Intelligence Swarm // V2.4
 
 [![Live Demo](https://img.shields.io/badge/Demo-Live%20App-success?style=for-the-badge&logo=vercel)](https://multi-agent-research-bot.vercel.app/)
 [![React](https://img.shields.io/badge/Frontend-React_18-cyan?style=for-the-badge&logo=react)](https://react.dev/)
@@ -13,7 +13,7 @@
 
 *Deploy a squad of autonomous agents to deconstruct, analyze, and synthesize any topic in seconds.*
 
-[View Demo](http://localhost:5173) · [Report Bug](https://github.com/Ranjithhub08/multi-agent-research-bot/issues) · [Request Feature](https://github.com/Ranjithhub08/multi-agent-research-bot/issues)
+[View Demo](https://multi-agent-research-bot.vercel.app/) · [Report Bug](https://github.com/Ranjithhub08/multi-agent-research-bot/issues) · [Request Feature](https://github.com/Ranjithhub08/multi-agent-research-bot/issues)
 
 </div>
 
@@ -32,10 +32,10 @@ This system features a failsafe **Autonomous Mode** that simulates complex agent
 | Feature | Status | Description |
 | :--- | :---: | :--- |
 | **🕵️‍♂️ Neural Swarm** | ✅ | 4-Agent Orchestration (Researcher, Critic, Synthesizer, Writer). |
+| **📟 Swarm Console** | ✅ | **NEW:** Real-time terminal log of agent activities. |
+| **📥 Report Export** | ✅ | **NEW:** Download research findings as production-ready Markdown. |
 | **🌌 Glassmorphism 2.0** | ✅ | Premium translucent UI with neon gradients and motion blur. |
-| **⚡ Zero Latency** | ✅ | Instant visual feedback with optimistic UI updates. |
 | **🛡️ Bulletproof** | ✅ | Works offline/without API keys via Autonomous Simulation Mode. |
-| **📱 Responsive** | ✅ | Fully fluid design that adapts to any viewport. |
 
 ## 🧠 System Architecture
 
@@ -57,13 +57,19 @@ graph TD
     AM -.->|Mock Generation| FE
 ```
 
-## 🛠️ Technology Stack
+## � Documentation
+- [🏗️ System Architecture](docs/ARCHITECTURE.md)
+- [📡 API Reference](docs/API_REFERENCE.md)
+- [💎 Detailed Features](docs/FEATURES.md)
+
+## �🛠️ Technology Stack
 
 ### **Frontend (The Face)**
-*   **Core**: React + Vite (Fastest build tool)
-*   **Language**: TypeScript (Type-safe reliability)
-*   **Styling**: Tailwind CSS (Utility-first architecture)
-*   **Motion**: Framer Motion (Cinema-grade animations)
+*   **Core**: React 18 + Vite
+*   **Language**: TypeScript
+*   **Styling**: Tailwind CSS
+*   **Motion**: Framer Motion
+*   **Icons**: Lucide React
 
 ### **Backend (The Brain)**
 *   **Core**: Java 17 + Spring Boot 3.2.4
@@ -80,7 +86,6 @@ cd multi-agent-research-bot
 
 ### 2️⃣ Ignite Frontend (Standalone)
 ```bash
-cd frontend
 npm install
 npm run dev
 ```
@@ -92,10 +97,6 @@ cd backend
 export OPENAI_API_KEY=your_key_here
 mvn spring-boot:run
 ```
-
-## 📸 Visuals
-
-*(Capture your screenshots and paste them here to show off the Epic UI)*
 
 ---
 

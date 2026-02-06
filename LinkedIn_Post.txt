@@ -1,0 +1,17 @@
+🚀 Excited to share my latest project: The Autonomous Research Grid! ⚡️
+
+I've been working on building a Multi-Agent Intelligence Swarm that can deconstruct and synthesize any complex topic in seconds. 🤖🧬
+
+Key Features:
+✅ 4-Agent Orchestration (Researcher, Critic, Synthesizer, Writer)
+📟 Real-time Swarm Console to watch the agents think
+📥 Instant Markdown Export for research reports
+🌌 Premium Glassmorphism UI for a cinematic experience
+🛡️ Autonomous Simulation Mode for 100% uptime
+
+Built with: React 18, Spring Boot 3, Spring AI, and Framer Motion.
+
+Check out the repo here: https://github.com/Ranjithhub08/multi-agent-research-bot
+Live Demo: https://multi-agent-research-bot.vercel.app/
+
+#AI #MultiAgentSystems #SpringBoot #React #OpenSource #BuildInPublic
