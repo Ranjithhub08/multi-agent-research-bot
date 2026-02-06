@@ -1,0 +1,9 @@
+/Users/ranjithkumar/multi-agent-ai-research-bot/backend/src/main/java/com/example/researchbot/ResearchBotApplication.java
+/Users/ranjithkumar/multi-agent-ai-research-bot/backend/src/main/java/com/example/researchbot/service/agents/WriterAgent.java
+/Users/ranjithkumar/multi-agent-ai-research-bot/backend/src/main/java/com/example/researchbot/controller/ResearchController.java
+/Users/ranjithkumar/multi-agent-ai-research-bot/backend/src/main/java/com/example/researchbot/dto/ResearchRequest.java
+/Users/ranjithkumar/multi-agent-ai-research-bot/backend/src/main/java/com/example/researchbot/service/agents/SynthesizerAgent.java
+/Users/ranjithkumar/multi-agent-ai-research-bot/backend/src/main/java/com/example/researchbot/service/OrchestratorService.java
+/Users/ranjithkumar/multi-agent-ai-research-bot/backend/src/main/java/com/example/researchbot/service/agents/CriticAgent.java
+/Users/ranjithkumar/multi-agent-ai-research-bot/backend/src/main/java/com/example/researchbot/dto/ResearchResponse.java
+/Users/ranjithkumar/multi-agent-ai-research-bot/backend/src/main/java/com/example/researchbot/service/agents/ResearcherAgent.java
