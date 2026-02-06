@@ -4,6 +4,7 @@
 # ⚡️ AUTONOMOUS RESEARCH GRID ⚡️
 ### Multi-Agent Intelligence Swarm // V2.0
 
+[![Live Demo](https://img.shields.io/badge/Demo-Live%20App-success?style=for-the-badge&logo=vercel)](https://multi-agent-research-bot.vercel.app/)
 [![React](https://img.shields.io/badge/Frontend-React_18-cyan?style=for-the-badge&logo=react)](https://react.dev/)
 [![Spring Boot](https://img.shields.io/badge/Backend-Spring_Boot_3-green?style=for-the-badge&logo=spring)](https://spring.io/)
 [![TypeScript](https://img.shields.io/badge/Language-TypeScript-blue?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
