@@ -97,13 +97,14 @@ git clone https://github.com/Ranjithhub08/multi-agent-research-bot.git
 cd multi-agent-research-bot
 ```
 
-### 2️⃣ Ignite Backend (Python)
+### 2️⃣ Ignite Backend (The Swarm)
 ```bash
-cd backend-python
+# From the project root
 pip install -r requirements.txt
 export GOOGLE_API_KEY=your_gemini_key
-python -m app.main
+python main.py
 ```
+*Port: `http://localhost:8000`*
 *Port: `http://localhost:8000`*
 
 ### 3️⃣ Ignite Frontend
