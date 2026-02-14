@@ -8,9 +8,6 @@ import {
   Terminal, Download, Cpu
 } from 'lucide-react';
 
-interface ResearchResponse {
-  finalReport: string;
-}
 
 interface AgentLog {
   agent: string;
@@ -80,45 +77,51 @@ This demonstration confirms the architecture's ability to orchestrate complex mu
     setLoading(true);
     setResult(null);
     setLogs([]);
-    setActiveAgent('Researcher Details...');
-
-    const agentSequence = [
-      { name: 'Researcher', action: 'Scouring knowledge base...', logs: ['Initializing neural search...', 'Scanning academic repositories...', 'Extracting core entities...', 'Filtering noise from data...'] },
-      { name: 'Critic', action: 'Analyzing gaps...', logs: ['Validating source reliability...', 'Checking for logical inconsistencies...', 'Cross-referencing datasets...', 'Flagging potential biases...'] },
-      { name: 'Synthesizer', action: 'Connecting dots...', logs: ['Merging data vectors...', 'Resolving conflicting nodes...', 'Identifying emergent patterns...', 'Structuring knowledge graph...'] },
-      { name: 'Writer', action: 'Crafting report...', logs: ['Initializing writing engine...', 'Applying professional tone...', 'Formatting markdown structure...', 'Finalizing synthesis...'] }
-    ];
-
-    let currentAgentIdx = 0;
-    let currentLogIdx = 0;
-
-    const interval = setInterval(() => {
-      const agent = agentSequence[currentAgentIdx];
-      setActiveAgent(`${agent.name}: ${agent.action}`);
-
-      if (currentLogIdx < agent.logs.length) {
-        addLog(agent.name, agent.logs[currentLogIdx]);
-        currentLogIdx++;
-      } else {
-        addLog(agent.name, "Phase complete.", 'success');
-        currentAgentIdx++;
-        currentLogIdx = 0;
-        if (currentAgentIdx >= agentSequence.length) {
-          clearInterval(interval);
-        }
-      }
-    }, 1200);
+    setActiveAgent('Researcher: Initializing...');
 
     try {
-      const response = await axios.post<ResearchResponse>('http://localhost:8080/api/research', { topic }, { timeout: 8000 });
-      clearInterval(interval);
+      // Use Server-Sent Events for real-time logging
+      const eventSource = new EventSource(`http://localhost:8000/api/research/stream?topic=${encodeURIComponent(topic)}`);
+
+      eventSource.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+
+        if (data.agent && data.message) {
+          addLog(data.agent, data.message, data.type || 'info');
+          setActiveAgent(`${data.agent}: ${data.message}`);
+        }
+
+        if (data.finalReport) {
+          setResult(data.finalReport);
+          eventSource.close();
+          setLoading(false);
+          setActiveAgent('');
+        }
+      };
+
+      eventSource.onerror = (err) => {
+        console.error("SSE Error:", err);
+        eventSource.close();
+
+        // Fallback to traditional POST if SSE fails (or if we just want a fallback)
+        handleFallback(topic);
+      };
+
+    } catch (error) {
+      console.error("Connection Error:", error);
+      handleFallback(topic);
+    }
+  };
+
+  const handleFallback = async (topic: string) => {
+    try {
+      const response = await axios.post<{ finalReport: string }>('http://localhost:8000/api/research', { topic });
       setResult(response.data.finalReport);
     } catch (error) {
       console.warn("Backend unavailable, using Autonomous Mode.");
-      await new Promise(resolve => setTimeout(resolve, 8000));
+      await new Promise(resolve => setTimeout(resolve, 3000));
       setResult(generateMockReport(topic));
     } finally {
-      clearInterval(interval);
       setLoading(false);
       setActiveAgent('');
     }

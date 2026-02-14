@@ -1,0 +1,2 @@
+# Multi-Agent Research Bot Foundation
+-r backend/requirements.txt

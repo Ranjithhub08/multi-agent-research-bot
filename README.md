@@ -41,19 +41,21 @@ This system features a failsafe **Autonomous Mode** that simulates complex agent
 
 ```mermaid
 graph TD
-    User[👤 User Command] -->|Input| FE[⚛️ React Frontend]
-    FE -->|API Call| BE[☕ Spring Boot Backend]
+    User[👤 User Command] -->|HTTPS/SSE| FE[⚛️ React Frontend]
+    FE -->|Streaming API| BE[🐍 Python FastAPI Backend]
     
-    subgraph "Autonomous Swarm"
-    BE -->|Task| A1[🔎 Researcher]
-    A1 -->|Data| A2[⚖️ Critic]
-    A2 -->|Feedback| A3[🧬 Synthesizer]
-    A3 -->|Draft| A4[📝 Writer]
+    subgraph "LangGraph Swarm"
+    BE -->|State Context| A1[🔎 Researcher]
+    A1 -->|Search Data| A2[📊 Analyst]
+    A2 -->|Technical Framework| A3[⚖️ Critic]
+    A3 -->|Refined Context| A4[📝 Writer]
+    A4 -->|MD Synthesis| BE
     end
     
-    A4 -->|Final Report| FE
+    BE -->|Real-time Logs| FE
+    BE -->|Final Report| FE
     
-    FE -.->|Fallback Mode| AM[⚡ Autonomous Engine]
+    FE -.->|Failsafe Mode| AM[⚡ Autonomous Engine]
     AM -.->|Mock Generation| FE
 ```
 
@@ -71,10 +73,21 @@ graph TD
 *   **Motion**: Framer Motion
 *   **Icons**: Lucide React
 
-### **Backend (The Brain)**
-*   **Core**: Java 17 + Spring Boot 3.2.4
-*   **AI Engine**: Spring AI + OpenAI GPT-4
-*   **Architecture**: Event-Driven REST API
+### **Backend (The Neural Engine)**
+*   **Core**: Python 3.10+ & FastAPI
+*   **Orchestration**: **LangGraph** (State-based Multi-Agent Workflows)
+*   **AI Engine**: Google Gemini Pro (via LangChain)
+*   **Tools**: Tavily Search API (Production-grade intelligence)
+*   **Logging**: Real-time streaming via Server-Sent Events (SSE)
+
+## 🏗️ Multi-Agent Workflow (The Swarm)
+
+The system utilizes a structured **Directed Acyclic Graph (DAG)** implemented via LangGraph:
+
+1.  **Researcher Node**: Initiates deep-web search and extracts primary data points.
+2.  **Analyst Node**: Processes raw data, identifies patterns, and builds a technical framework.
+3.  **Critic Node**: Adversarial review of analysis, checking for bias and logical "hallucinations".
+4.  **Writer Node**: Synthesizes all inputs into polished Markdown reports.
 
 ## 🚀 Speed Run (Getting Started)
 
@@ -84,19 +97,22 @@ git clone https://github.com/Ranjithhub08/multi-agent-research-bot.git
 cd multi-agent-research-bot
 ```
 
-### 2️⃣ Ignite Frontend (Standalone)
+### 2️⃣ Ignite Backend (Python)
 ```bash
+cd backend-python
+pip install -r requirements.txt
+export GOOGLE_API_KEY=your_gemini_key
+python -m app.main
+```
+*Port: `http://localhost:8000`*
+
+### 3️⃣ Ignite Frontend
+```bash
+cd frontend
 npm install
 npm run dev
 ```
 *Port: `http://localhost:5173`*
-
-### 3️⃣ Ignite Backend (Optional)
-```bash
-cd backend
-export OPENAI_API_KEY=your_key_here
-mvn spring-boot:run
-```
 
 ---
 
