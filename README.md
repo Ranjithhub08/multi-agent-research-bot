@@ -1,110 +1,84 @@
+# Autonomous Research Grid: Multi-Agent Intelligence Engine
 
-<div align="center">
+![Version](https://img.shields.io/badge/version-3.0.0-blue?style=flat-square)
+![Python](https://img.shields.io/badge/python-3.9+-blue?style=flat-square&logo=python)
+![Gemini](https://img.shields.io/badge/LLM-Gemini%202.0%20Flash-orange?style=flat-square)
+![License](https://img.shields.io/badge/license-MIT-green?style=flat-square)
 
-# ⚡️ AUTONOMOUS RESEARCH GRID ⚡️
-### Multi-Agent Intelligence Swarm // V2.4
+An autonomous multi-agent research framework powered by the **Google Gemini 2.0 Flash** API. The system utilizes a specialized agent orchestration layer to perform deep technical research, adversarial critique, and structured data synthesis.
 
-[![Live Demo](https://img.shields.io/badge/Demo-Live%20App-success?style=for-the-badge&logo=vercel)](https://multi-agent-research-bot.vercel.app/)
-[![React](https://img.shields.io/badge/Frontend-React_18-cyan?style=for-the-badge&logo=react)](https://react.dev/)
-[![Spring Boot](https://img.shields.io/badge/Backend-Spring_Boot_3-green?style=for-the-badge&logo=spring)](https://spring.io/)
-[![TypeScript](https://img.shields.io/badge/Language-TypeScript-blue?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
-[![Tailwind](https://img.shields.io/badge/Style-Tailwind_CSS-pink?style=for-the-badge&logo=tailwindcss)](https://tailwindcss.com/)
-[![License](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)](LICENSE)
+## Core Architecture
 
-*Deploy a squad of autonomous agents to deconstruct, analyze, and synthesize any topic in seconds.*
+The framework is built on a modular tripartite agent architecture, ensuring high-fidelity outputs through multi-stage processing and logical verification.
 
-[View Demo](https://multi-agent-research-bot.vercel.app/) · [Report Bug](https://github.com/Ranjithhub08/multi-agent-research-bot/issues) · [Request Feature](https://github.com/Ranjithhub08/multi-agent-research-bot/issues)
+### System Workflow
+The orchestration layer coordinates data flow between three specialized agents:
 
-</div>
-
----
-
-## 🔥 The Experience
-
-Welcome to the future of research. This isn't just a bot; it's an **Autonomous Grid** that operates 24/7. 
-
-> **"If the backend sleeps, the Frontend wakes up."**
-
-This system features a failsafe **Autonomous Mode** that simulates complex agent workflows entirely in the browser, ensuring the application **NEVER** fails during a demo.
-
-## 💎 Epic Features
-
-| Feature | Status | Description |
-| :--- | :---: | :--- |
-| **🕵️‍♂️ Neural Swarm** | ✅ | 4-Agent Orchestration (Researcher, Critic, Synthesizer, Writer). |
-| **📟 Swarm Console** | ✅ | **NEW:** Real-time terminal log of agent activities. |
-| **📥 Report Export** | ✅ | **NEW:** Download research findings as production-ready Markdown. |
-| **🌌 Glassmorphism 2.0** | ✅ | Premium translucent UI with neon gradients and motion blur. |
-| **🛡️ Bulletproof** | ✅ | Works offline/without API keys via Autonomous Simulation Mode. |
-
-## 🧠 System Architecture
+1.  **ResearchAgent**: Performs comprehensive data gathering and preliminary technical analysis based on user-defined topics.
+2.  **CriticAgent**: Conducts an adversarial evaluation of the research data, identifying logical inconsistencies, technical gaps, and potential biases.
+3.  **SupervisorAgent**: Acts as the system orchestrator, synthesizing agent outputs into a final production-grade Markdown report.
 
 ```mermaid
 graph TD
-    User[👤 User Command] -->|Input| FE[⚛️ React Frontend]
-    FE -->|API Call| BE[☕ Spring Boot Backend]
-    
-    subgraph "Autonomous Swarm"
-    BE -->|Task| A1[🔎 Researcher]
-    A1 -->|Data| A2[⚖️ Critic]
-    A2 -->|Feedback| A3[🧬 Synthesizer]
-    A3 -->|Draft| A4[📝 Writer]
-    end
-    
-    A4 -->|Final Report| FE
-    
-    FE -.->|Fallback Mode| AM[⚡ Autonomous Engine]
-    AM -.->|Mock Generation| FE
+    User([User Query]) --> Supervisor{Supervisor Agent}
+    Supervisor -->|Task Delegation| Research[Research Agent]
+    Research -->|Preliminary Findings| Critic[Critic Agent]
+    Critic -->|Refinement Feedback| Research
+    Critic -->|Verified Data| Supervisor
+    Supervisor -->|Final Synthesis| Report[Technical Report]
 ```
 
-## � Documentation
-- [🏗️ System Architecture](docs/ARCHITECTURE.md)
-- [📡 API Reference](docs/API_REFERENCE.md)
-- [💎 Detailed Features](docs/FEATURES.md)
+## Technical Features
 
-## �🛠️ Technology Stack
+*   **Modular Agent Orchestration**: Class-based implementation ensuring strict separation of concerns and high maintainability.
+*   **Adversarial Logic Processing**: Integrated feedback loop between research and critique phases to minimize hallucinations.
+*   **Secure Credential Management**: Environment-level isolation for API keys using standard secret management practices.
+*   **Structured Execution Trace**: Comprehensive logging of agent transitions and intermediate state for debugging and transparency.
+*   **Asynchronous Processing**: Built on `asyncio` for non-blocking I/O during high-latency LLM operations.
 
-### **Frontend (The Face)**
-*   **Core**: React 18 + Vite
-*   **Language**: TypeScript
-*   **Styling**: Tailwind CSS
-*   **Motion**: Framer Motion
-*   **Icons**: Lucide React
+## Implementation Details
 
-### **Backend (The Brain)**
-*   **Core**: Java 17 + Spring Boot 3.2.4
-*   **AI Engine**: Spring AI + OpenAI GPT-4
-*   **Architecture**: Event-Driven REST API
+The system is developed with a focus on engineering best practices:
+*   **Python 3.9+** backend.
+*   **Google Gemini SDK** for primary model interaction.
+*   **Structured Logging** for system observability.
+*   **Decoupled Architecture**: All agents are isolated cognitive units.
 
-## 🚀 Speed Run (Getting Started)
+## Installation
 
-### 1️⃣ Clone the Grid
+### 1. Prerequisites
+- Python 3.9 or higher
+- Google Cloud / API key for Gemini
+
+### 2. Setup
 ```bash
+# Clone the repository
 git clone https://github.com/Ranjithhub08/multi-agent-research-bot.git
 cd multi-agent-research-bot
+
+# Install dependencies
+pip3 install -r requirements.txt
 ```
 
-### 2️⃣ Ignite Frontend (Standalone)
+### 3. Configuration
+Define your environment variables in a `.env` file:
+```env
+GOOGLE_API_KEY=your_api_key_here
+```
+
+## Usage
+
+Execute the main pipeline via the CLI:
+
 ```bash
-npm install
-npm run dev
-```
-*Port: `http://localhost:5173`*
-
-### 3️⃣ Ignite Backend (Optional)
-```bash
-cd backend
-export OPENAI_API_KEY=your_key_here
-mvn spring-boot:run
+python3 main.py "Comparative analysis of post-quantum cryptography algorithms"
 ```
 
----
+## Documentation
 
-<div align="center">
+*   [Technical Architecture](./ARCHITECTURE.md) - Deep dive into agent logic and sequence diagrams.
+*   [API Reference](./docs/API_REFERENCE.md) - External API integration details.
+*   [Features Overview](./docs/FEATURES.md) - Detailed breakdown of system capabilities.
 
-**Built with 💜 by [Ranjithhub08](https://github.com/Ranjithhub08)**
-
-⭐ Star this repo if you like it!
-
-</div>
-
+## License
+This project is licensed under the MIT License.
