@@ -1,4 +1,5 @@
 import os
+from .config import settings
 import logging
 from typing import Any, Dict, Optional
 from langchain_google_genai import ChatGoogleGenerativeAI
@@ -8,7 +9,7 @@ logger = logging.getLogger(__name__)
 
 class LLMService:
     def __init__(self):
-        self.api_key = os.getenv("GOOGLE_API_KEY")
+        self.api_key = settings.GOOGLE_API_KEY
         
         if not self.api_key:
             logger.error("CRITICAL: GOOGLE_API_KEY not found. LLM service will fail.")

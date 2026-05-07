@@ -1,4 +1,5 @@
 import os
+from core.config import settings
 import json
 import logging
 import uvicorn
@@ -37,7 +38,7 @@ class ResearchRequest(BaseModel):
 
 @app.get("/health")
 async def health_check():
-    return {"status": "operational", "engine": "LangGraph V3", "mode": "MOCK" if not os.getenv("GOOGLE_API_KEY") else "LIVE"}
+    return {"status": "operational", "engine": "LangGraph V3", "mode": "MOCK" if not settings.GOOGLE_API_KEY else "LIVE"}
 
 @app.post("/api/research")
 async def start_research(request: ResearchRequest):
@@ -69,5 +70,5 @@ async def stream_research(topic: str):
     return StreamingResponse(event_generator(), media_type="text/event-stream")
 
 if __name__ == "__main__":
-    port = int(os.getenv("PORT", 8000))
+    port = settings.PORT
     uvicorn.run("main:app", host="0.0.0.0", port=port, reload=True)
