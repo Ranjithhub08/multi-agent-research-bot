@@ -53,6 +53,9 @@ jobs:
         run: npm install
       - name: Build
         run: npm run build
+      - name: Run frontend tests
+        working-directory: frontend
+        run: npm test -- --run
 
   agent-tests:
     name: Agent Unit Tests
